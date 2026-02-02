@@ -27,8 +27,7 @@ public class LoggingAspect {
      * layers.
      */
     @Pointcut("within(com.example.identity.application..*) || " +
-            "within(com.example.identity.presentation..*) || " +
-            "within(com.example.identity.infrastructure.security..*)")
+            "within(com.example.identity.presentation..*)")
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut definition
     }

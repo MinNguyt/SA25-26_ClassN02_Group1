@@ -35,9 +35,19 @@ public class GatewayConfig {
                                                 .filters(f -> f.stripPrefix(1)) // Remove /api prefix
                                                 .uri("http://localhost:8081"))
 
-                                // Company Service
-                                .route("company-service", r -> r
+                                // Fleet Service - Companies, Vehicles, Seats
+                                .route("fleet-service-companies", r -> r
                                                 .path("/api/companies/**")
+                                                .filters(f -> f.stripPrefix(1))
+                                                .uri("http://localhost:8082"))
+
+                                .route("fleet-service-vehicles", r -> r
+                                                .path("/api/vehicles/**")
+                                                .filters(f -> f.stripPrefix(1))
+                                                .uri("http://localhost:8082"))
+
+                                .route("fleet-service-seats", r -> r
+                                                .path("/api/seats/**")
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8082"))
 
