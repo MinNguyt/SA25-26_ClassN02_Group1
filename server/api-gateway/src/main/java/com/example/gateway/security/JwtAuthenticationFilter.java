@@ -53,11 +53,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             return forwardWithCorrelationId(exchange, chain, correlationId, null);
         }
 
-        // Extract token from cookies
-        String token = extractTokenFromCookies(exchange);
+        // Extract token from Authorization header or cookies
+        String token = extractToken(exchange);
 
         if (token != null) {
-            log.debug("[{}] Token found in cookies, forwarding to downstream service", correlationId);
+            log.debug("[{}] Token found, forwarding to downstream service", correlationId);
             return forwardWithCorrelationId(exchange, chain, correlationId, token);
         }
 
@@ -84,9 +84,25 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         return excludedPaths.stream().anyMatch(excluded -> path.startsWith(excluded));
     }
 
-    private String extractTokenFromCookies(ServerWebExchange exchange) {
+    /**
+     * Extracts JWT token from Authorization header first, then from cookies.
+     */
+    private String extractToken(ServerWebExchange exchange) {
+        // Try Authorization header first
+        String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            log.debug("Token extracted from Authorization header");
+            return authHeader.substring(7);
+        }
+
+        // Fall back to cookies
         HttpCookie cookie = exchange.getRequest().getCookies().getFirst("ACCESS_TOKEN");
-        return cookie != null ? cookie.getValue() : null;
+        if (cookie != null) {
+            log.debug("Token extracted from ACCESS_TOKEN cookie");
+            return cookie.getValue();
+        }
+
+        return null;
     }
 
     @Override

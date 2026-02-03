@@ -44,12 +44,12 @@ export default defineConfig(() => {
       port: 3000,
       proxy: {
         '/uploads': {
-          target: 'http://localhost:5000',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           secure: false,
         },
         '/api': {
-          target: 'http://localhost:5000',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           secure: false,
         },

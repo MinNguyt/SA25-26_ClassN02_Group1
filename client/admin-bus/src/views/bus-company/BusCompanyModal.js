@@ -47,11 +47,12 @@ const BusCompanyModal = ({
     useEffect(() => {
         if (visible) {
             if (mode === 'edit' && editData) {
+                // editData uses camelCase from backend
                 setFormData({
-                    company_name: editData.company_name || '',
+                    company_name: editData.companyName || '',
                     descriptions: editData.descriptions || '',
                     image: null,
-                    markdown_content: editData.markdown_content || ''
+                    markdown_content: editData.markdownContent || ''
                 });
                 setPreviewImage(editData.image ? editData.image : null);
             } else {
@@ -151,11 +152,17 @@ const BusCompanyModal = ({
         setAlert({ show: false, message: '', type: 'success' });
 
         try {
+            // Create the data object matching the backend DTO (using camelCase)
+            const dataObject = {
+                companyName: formData.company_name.trim(),
+                descriptions: formData.descriptions.trim(),
+                markdownContent: formData.markdown_content || '',
+                markdownHtml: formData.markdown_content ? md.render(formData.markdown_content) : ''
+            };
+
             const submitData = new FormData();
-            submitData.append('company_name', formData.company_name.trim());
-            submitData.append('descriptions', formData.descriptions.trim());
-            submitData.append('markdown_content', formData.markdown_content || '');
-            submitData.append('markdown_html', formData.markdown_content ? md.render(formData.markdown_content) : '');
+            // Append data as JSON blob
+            submitData.append('data', new Blob([JSON.stringify(dataObject)], { type: 'application/json' }));
 
             if (formData.image) {
                 submitData.append('image', formData.image);

@@ -3,7 +3,7 @@
 
     <!-- Properties -->
     <property name="LOG_PATH" value="./logs"/>
-    <property name="APP_NAME" value="identity-service"/>
+    <property name="APP_NAME" value="fleet-service"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%cyan(%-15.15thread)] %yellow(%-40.40logger{39}) - [%X{correlationId:-N/A}] %msg%n"/>
 
     <!-- Console Appender (Human Readable) -->
@@ -33,13 +33,12 @@
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </root>
-        <logger name="com.example.identity" level="DEBUG" additivity="false">
+        <logger name="main.java.com.example.fleet" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
         <logger name="org.springframework.security" level="WARN"/>
         <logger name="org.hibernate.SQL" level="DEBUG"/>
-        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
     </springProfile>
 
     <!-- Production Profile -->
@@ -48,7 +47,7 @@
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </root>
-        <logger name="com.example.identity" level="INFO" additivity="false">
+        <logger name="main.java.com.example.fleet" level="INFO" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>

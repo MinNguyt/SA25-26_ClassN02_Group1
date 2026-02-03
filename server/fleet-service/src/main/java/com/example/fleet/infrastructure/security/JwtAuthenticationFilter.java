@@ -32,11 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        String requestPath = request.getRequestURI();
+        String method = request.getMethod();
+        log.debug("Processing {} {} - checking for JWT token", method, requestPath);
+
         String jwt = resolveToken(request);
 
-        if (jwt != null && tokenProvider.validateToken(jwt)) {
+        if (jwt == null) {
+            log.debug("No JWT token found in request for {} {}", method, requestPath);
+        } else if (!tokenProvider.validateToken(jwt)) {
+            log.warn("Invalid JWT token for {} {}", method, requestPath);
+        } else {
             String subject = tokenProvider.getSubject(jwt);
-            log.debug("Valid JWT token for user: {}", subject);
+            log.debug("Valid JWT token for user: {} on {} {}", subject, method, requestPath);
 
             // Create simple authentication with USER role
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -45,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     List.of(new SimpleGrantedAuthority("ROLE_USER")));
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("Authentication set in SecurityContext for user: {}", subject);
         }
 
         filterChain.doFilter(request, response);

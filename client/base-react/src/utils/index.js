@@ -1,7 +1,7 @@
 // Xây dựng các hàm dùng chung
 
 // API Base URL from config
-export const API_BASE_URL = 'http://localhost:5000';
+export const API_BASE_URL = 'http://localhost:8080';
 
 // Utility to get full image URL
 export const getImageUrl = (imagePath) => {

@@ -27,7 +27,7 @@ const CompanyLogo = ({ image, companyName, size = 50, className = '' }) => {
 
     return (
         <img
-            src={`http://localhost:5000${image}`}
+            src={`http://localhost:8080/files${image}`}
             alt={companyName}
             width={size}
             height={size}

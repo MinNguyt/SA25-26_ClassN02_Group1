@@ -399,7 +399,7 @@ export const carsAPI = {
     getCars: async (params = {}) => {
         const { page = 1, limit = 10, search = '', sortBy = 'id', order = 'asc', company_id } = params;
         try {
-            const response = await apiClient.get('/cars', {
+            const response = await apiClient.get('/vehicles', {
                 params: { page, limit, search, sortBy, order, company_id }
             });
             return response.data;
@@ -410,7 +410,7 @@ export const carsAPI = {
 
     getCar: async (id) => {
         try {
-            const response = await apiClient.get(`/cars/${id}`);
+            const response = await apiClient.get(`/vehicles/${id}`);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to fetch car');
@@ -419,7 +419,7 @@ export const carsAPI = {
 
     createCar: async (payload) => {
         try {
-            const response = await apiClient.post('/cars', payload, {
+            const response = await apiClient.post('/vehicles', payload, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -433,7 +433,7 @@ export const carsAPI = {
 
     updateCar: async (id, payload) => {
         try {
-            const response = await apiClient.post(`/cars/${id}`, payload, {
+            const response = await apiClient.post(`/vehicles/${id}`, payload, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -448,7 +448,7 @@ export const carsAPI = {
         const formData = new FormData();
         formData.append('featured_image', file);
         try {
-            const response = await apiClient.post(`/cars/${id}/featured-image`, formData, {
+            const response = await apiClient.post(`/vehicles/${id}/featured-image`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             return response.data;
@@ -459,7 +459,7 @@ export const carsAPI = {
 
     deleteCar: async (id) => {
         try {
-            const response = await apiClient.delete(`/cars/${id}`);
+            const response = await apiClient.delete(`/vehicles/${id}`);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to delete car');
@@ -468,7 +468,7 @@ export const carsAPI = {
 
     popularGarage: async () => {
         try {
-            const response = await apiClient.get('/cars/popular-garage');
+            const response = await apiClient.get('/vehicles/popular-garage');
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to fetch popular garages');
@@ -507,7 +507,7 @@ export const seatsAPI = {
 
     generateSeatsByCar: async (carId, payload) => {
         try {
-            const response = await apiClient.post(`/cars/${carId}/seats`, payload);
+            const response = await apiClient.post(`/vehicles/${carId}/seats`, payload);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to generate seats');

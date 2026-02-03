@@ -81,11 +81,13 @@ const BusCompany = () => {
                 order: sortOrder
             });
 
-            if (response.data || response.success) {
-                setCompanies(response.responseObject || response.data || []);
-                // Calculate total pages based on response
-                const total = response.total || response.data?.length || 0;
-                setTotalPages(Math.ceil(total / pageSize));
+            // Handle ApiResponse format: { success, message, data, timestamp }
+            if (response.success) {
+                // data is a Page object with content array
+                const pageData = response.data;
+                setCompanies(pageData?.content || []);
+                // Calculate total pages from Page object
+                setTotalPages(pageData?.totalPages || 1);
             } else {
                 setAlert({
                     show: true,
@@ -362,12 +364,12 @@ const BusCompany = () => {
                                             <CTableDataCell>
                                                 <CompanyLogo
                                                     image={company.image}
-                                                    companyName={company.company_name}
+                                                    companyName={company.companyName}
                                                     size={50}
                                                 />
                                             </CTableDataCell>
                                             <CTableDataCell>
-                                                <strong>{company.company_name}</strong>
+                                                <strong>{company.companyName}</strong>
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 {company.descriptions ? (
@@ -382,10 +384,10 @@ const BusCompany = () => {
                                                 )}
                                             </CTableDataCell>
                                             <CTableDataCell>
-                                                {formatDate(company.created_at)}
+                                                {formatDate(company.createdAt)}
                                             </CTableDataCell>
                                             <CTableDataCell>
-                                                {getStatusBadge(company.status || 'active')}
+                                                {getStatusBadge(company.isActive === 1 ? 'active' : 'inactive')}
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 <div className="d-flex gap-1">

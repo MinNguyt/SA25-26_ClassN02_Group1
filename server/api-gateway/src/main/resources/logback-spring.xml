@@ -31,9 +31,11 @@
     <springProfile name="default,dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </root>
         <logger name="com.example.gateway" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </logger>
         <logger name="org.springframework.cloud.gateway" level="DEBUG"/>
         <logger name="reactor.netty" level="INFO"/>

@@ -2,6 +2,7 @@ package com.example.fleet.presentation.controller;
 
 import com.example.fleet.application.SeatService;
 import com.example.fleet.presentation.dto.seat.*;
+import com.example.fleet.presentation.dto.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,39 +25,42 @@ public class SeatController {
 
     @GetMapping
     @Operation(summary = "Get all seats")
-    public ResponseEntity<List<SeatResponseDTO>> getAllSeats() {
-        return ResponseEntity.ok(seatService.getAllSeats());
+    public ResponseEntity<ApiResponse<List<SeatResponseDTO>>> getAllSeats() {
+        return ResponseEntity.ok(ApiResponse.success(seatService.getAllSeats()));
     }
 
     @GetMapping("/vehicle/{vehicleId}")
     @Operation(summary = "Get seats by vehicle ID")
-    public ResponseEntity<List<SeatResponseDTO>> getSeatsByVehicleId(@PathVariable Integer vehicleId) {
-        return ResponseEntity.ok(seatService.getSeatsByVehicleId(vehicleId));
+    public ResponseEntity<ApiResponse<List<SeatResponseDTO>>> getSeatsByVehicleId(@PathVariable Integer vehicleId) {
+        return ResponseEntity.ok(ApiResponse.success(seatService.getSeatsByVehicleId(vehicleId)));
     }
 
     @GetMapping("/vehicle/{vehicleId}/available")
     @Operation(summary = "Get available seats by vehicle ID")
-    public ResponseEntity<List<SeatResponseDTO>> getAvailableSeatsByVehicleId(@PathVariable Integer vehicleId) {
-        return ResponseEntity.ok(seatService.getAvailableSeatsByVehicleId(vehicleId));
+    public ResponseEntity<ApiResponse<List<SeatResponseDTO>>> getAvailableSeatsByVehicleId(
+            @PathVariable Integer vehicleId) {
+        return ResponseEntity.ok(ApiResponse.success(seatService.getAvailableSeatsByVehicleId(vehicleId)));
     }
 
     @PostMapping("/vehicle/{vehicleId}/generate")
     @Operation(summary = "Generate seats for a vehicle")
-    public ResponseEntity<List<SeatResponseDTO>> generateSeatsForVehicle(
+    public ResponseEntity<ApiResponse<List<SeatResponseDTO>>> generateSeatsForVehicle(
             @PathVariable Integer vehicleId,
             @Valid @RequestBody GenerateSeatsRequestDTO request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(seatService.generateSeatsForVehicle(vehicleId, request));
+                .body(ApiResponse.success(seatService.generateSeatsForVehicle(vehicleId, request),
+                        "Seats generated successfully"));
     }
 
     @PatchMapping("/{seatId}/status")
     @Operation(summary = "Update seat status")
-    public ResponseEntity<SeatResponseDTO> updateSeatStatus(
+    public ResponseEntity<ApiResponse<SeatResponseDTO>> updateSeatStatus(
             @PathVariable Integer seatId,
             @Valid @RequestBody SeatStatusUpdateDTO request) {
 
-        return ResponseEntity.ok(seatService.updateSeatStatus(seatId, request.getStatus()));
+        return ResponseEntity.ok(ApiResponse.success(seatService.updateSeatStatus(seatId, request.getStatus()),
+                "Seat status updated successfully"));
     }
 
     @DeleteMapping("/vehicle/{vehicleId}")

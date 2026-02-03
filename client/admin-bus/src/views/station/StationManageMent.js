@@ -358,7 +358,7 @@ const StationManagement = () => {
                                         <CTableRow key={station.id}>
                                             <CTableDataCell>
                                                 <StationImage
-                                                    image={`${'http://localhost:5000'}${station.image}`}
+                                                    image={`${'http://localhost:8080'}${station.image}`}
                                                     stationName={station.name}
                                                     size={50}
                                                 />

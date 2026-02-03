@@ -17,8 +17,9 @@ public class GatewayConfig {
         @PostConstruct
         public void init() {
                 log.info("API Gateway routes configured:");
+                log.info("  - /files/**        -> http://localhost:8082 (Fleet Service - Static Files)");
                 log.info("  - /api/auth/**     -> http://localhost:8081 (Identity Service)");
-                log.info("  - /api/companies/** -> http://localhost:8082 (Company Service)");
+                log.info("  - /api/bus-companies/** -> http://localhost:8082 (Company Service)");
                 log.info("  - /api/routes/**   -> http://localhost:8083 (Route Service)");
                 log.info("  - /api/schedules/** -> http://localhost:8084 (Schedule Service)");
                 log.info("  - /api/bookings/** -> http://localhost:8085 (Booking Service)");
@@ -29,6 +30,11 @@ public class GatewayConfig {
         @Bean
         public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
                 return builder.routes()
+                                // Static Files - Serve uploaded images from fleet-service
+                                .route("fleet-service-files", r -> r
+                                                .path("/files/**")
+                                                .uri("http://localhost:8082"))
+
                                 // Identity Service - Authentication endpoints
                                 .route("identity-service", r -> r
                                                 .path("/api/auth/**")
@@ -37,7 +43,7 @@ public class GatewayConfig {
 
                                 // Fleet Service - Companies, Vehicles, Seats
                                 .route("fleet-service-companies", r -> r
-                                                .path("/api/companies/**")
+                                                .path("/api/bus-companies/**")
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8082"))
 

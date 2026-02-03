@@ -13,16 +13,16 @@ import java.util.List;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-    List<Vehicle> findByBusCompanyId(Integer companyId);
+        List<Vehicle> findByBusCompanyId(Integer companyId);
 
-    @Query("SELECT v FROM Vehicle v WHERE " +
-            "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
-    Page<Vehicle> findAllByPagination(Pageable pageable, @Param("search") String search);
+        @Query("SELECT v FROM Vehicle v WHERE " +
+                        "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
+        Page<Vehicle> findAllByPagination(Pageable pageable, @Param("search") String search);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.busCompany.id = :companyId AND " +
-            "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
-    Page<Vehicle> findByCompanyIdWithPagination(
-            Pageable pageable,
-            @Param("companyId") Integer companyId,
-            @Param("search") String search);
+        @Query("SELECT v FROM Vehicle v WHERE v.busCompany.id = :companyId AND " +
+                        "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
+        Page<Vehicle> findByCompanyIdWithPagination(
+                        Pageable pageable,
+                        @Param("companyId") Integer companyId,
+                        @Param("search") String search);
 }

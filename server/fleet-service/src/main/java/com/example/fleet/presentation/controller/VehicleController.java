@@ -2,6 +2,7 @@ package com.example.fleet.presentation.controller;
 
 import com.example.fleet.application.VehicleService;
 import com.example.fleet.presentation.dto.vehicle.*;
+import com.example.fleet.presentation.dto.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,7 +26,7 @@ public class VehicleController {
 
     @GetMapping
     @Operation(summary = "Get all vehicles with pagination")
-    public ResponseEntity<Page<VehicleResponseDTO>> getAllVehicles(
+    public ResponseEntity<ApiResponse<Page<VehicleResponseDTO>>> getAllVehicles(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(required = false) String search,
@@ -38,33 +39,35 @@ public class VehicleController {
                 .companyId(companyId)
                 .build();
 
-        return ResponseEntity.ok(vehicleService.getAllVehicles(query));
+        return ResponseEntity.ok(ApiResponse.success(vehicleService.getAllVehicles(query)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get vehicle by ID")
-    public ResponseEntity<VehicleResponseDTO> getVehicleById(@PathVariable Integer id) {
-        return ResponseEntity.ok(vehicleService.getVehicleById(id));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> getVehicleById(@PathVariable Integer id) {
+        return ResponseEntity.ok(ApiResponse.success(vehicleService.getVehicleById(id)));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Create a new vehicle")
-    public ResponseEntity<VehicleResponseDTO> createVehicle(
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(
             @Valid @RequestPart("data") VehicleCreateDTO request,
             @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(vehicleService.createVehicle(request, featuredImage));
+                .body(ApiResponse.success(vehicleService.createVehicle(request, featuredImage),
+                        "Vehicle created successfully"));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Update a vehicle")
-    public ResponseEntity<VehicleResponseDTO> updateVehicle(
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> updateVehicle(
             @PathVariable Integer id,
             @Valid @RequestPart("data") VehicleUpdateDTO request,
             @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage) {
 
-        return ResponseEntity.ok(vehicleService.updateVehicle(id, request, featuredImage));
+        return ResponseEntity.ok(ApiResponse.success(vehicleService.updateVehicle(id, request, featuredImage),
+                "Vehicle updated successfully"));
     }
 
     @DeleteMapping("/{id}")

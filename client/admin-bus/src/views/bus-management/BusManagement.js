@@ -63,13 +63,13 @@ const BusManagement = () => {
     useEffect(() => {
         loadCars()
     }, [page, limit, search, companyFilter, sortBy, order])
-    console.log(companies);
+    console.log("companies", companies);
     const loadCompanies = async () => {
         try {
             const res = await busCompanyAPI.getCompanies({ limit: 1000 })
-
+            console.log("ddata", res.data);
             if (res.data || res.success) {
-                setCompanies(res.data || res.responseObject?.results || res.responseObject || [])
+                setCompanies(res.data?.content || [])
             }
         } catch (e) {
             console.error(e)

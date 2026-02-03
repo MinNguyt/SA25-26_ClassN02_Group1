@@ -54,7 +54,7 @@ public class FileStorageService {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String relativePath = "/" + subdirectory + "/" + newFileName;
+            String relativePath = subdirectory + "/" + newFileName;
             log.info("File stored successfully: {}", relativePath);
             return relativePath;
 
@@ -70,7 +70,11 @@ public class FileStorageService {
         }
 
         try {
-            Path file = rootLocation.resolve(filePath.substring(1)); // Remove leading /
+            // Remove /files/ prefix if present
+            String cleanPath = filePath.startsWith("/files/")
+                    ? filePath.substring(7)
+                    : filePath.substring(1);
+            Path file = rootLocation.resolve(cleanPath);
             Files.deleteIfExists(file);
             log.info("File deleted: {}", filePath);
         } catch (IOException e) {
