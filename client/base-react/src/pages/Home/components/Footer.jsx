@@ -2,172 +2,91 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* News */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Tin tức</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe Limousine – Đẳng cấp hạng thương gia thời đại mới</p>
-              <p className="text-gray-500 text-sm">Tổng quan các bến xe Vũng Tàu – Giới thiệu thông tin lịch trình nhà xe</p>
-              <p className="text-gray-500 text-sm">Top 31 nhà xe limousine, xe giường nằm đi Đà Lạt</p>
+    <footer className="bg-gray-900 text-gray-300 py-12 border-t border-gray-800 font-sans">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+
+          {/* Column 1: About & News */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-white text-lg font-bold mb-4 border-b-2 border-orange-500 inline-block pb-1">Tin tức nổi bật</h3>
+              <ul className="space-y-3 text-sm">
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Xe Limousine – Đẳng cấp thương gia</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Review bến xe Vũng Tàu & Lịch trình</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Top 31 nhà xe limousine đi Đà Lạt</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-white text-lg font-bold mb-4 border-b-2 border-orange-500 inline-block pb-1">Về Chúng Tôi</h3>
+              <ul className="space-y-3 text-sm">
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Giới Thiệu Kayak</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Tuyển dụng</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Tin tức & Sự kiện</a></li>
+              </ul>
             </div>
           </div>
 
-          {/* Routes */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Tuyến đường</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe đi Buôn Mê Thuột từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe đi Vũng Tàu từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe đi Nha Trang từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe đi Đà Lạt từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe đi Sapa từ Hà Nội</p>
-              <p className="text-gray-500 text-sm">Xe đi Hải Phòng từ Hà Nội</p>
-              <p className="text-gray-500 text-sm">Xe đi Vinh từ Hà Nội</p>
-            </div>
+          {/* Column 2: Popular Routes */}
+          <div className="space-y-6">
+            <h3 className="text-white text-lg font-bold mb-4 border-b-2 border-orange-500 inline-block pb-1">Tuyến đường phổ biến</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Sài Gòn - Đà Lạt</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Sài Gòn - Nha Trang</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Sài Gòn - Vũng Tàu</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Hà Nội - Sapa</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Hà Nội - Hạ Long</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200 block">Đà Nẵng - Huế</a></li>
+            </ul>
           </div>
 
-          {/* Limousine */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Xe Limousine</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe Limousine đi Đà Lạt từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Vũng Tàu từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Nha Trang từ Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Hải Phòng từ Hà Nội</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Hạ Long từ Hà Nội</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Sapa Từ Hà Nội</p>
-              <p className="text-gray-500 text-sm">Xe Limousine đi Quảng Ninh từ Hà Nội</p>
+          {/* Column 3: Bus Stations & Partners */}
+          <div className="space-y-6">
+            <h3 className="text-white text-lg font-bold mb-4 border-b-2 border-orange-500 inline-block pb-1">Đối tác & Bến xe</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Bến xe Miền Đông</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Bến xe Mỹ Đình</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Nhà xe Phương Trang</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Nhà xe Thành Bưởi</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Nhà xe Kumho Samco</a></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact & Support */}
+          <div className="space-y-6">
+            <h3 className="text-white text-lg font-bold mb-4 border-b-2 border-orange-500 inline-block pb-1">Hỗ trợ khách hàng</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Chính sách bảo mật</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Điều khoản sử dụng</a></li>
+              <li><a href="#" className="hover:text-orange-400 transition-colors duration-200">Hướng dẫn đặt vé</a></li>
+            </ul>
+
+            <div className="pt-4 border-t border-gray-800">
+              <p className="text-sm font-semibold text-white mb-2">Tổng đài đặt vé:</p>
+              <div className="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                <p className="text-orange-500 text-xl font-bold">1900 6067</p>
+                <p className="text-xs text-gray-500 mt-1">Hỗ trợ 24/7</p>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <h4 className="text-sm font-semibold text-white mb-3">Chứng nhận</h4>
+              <div className="flex gap-2">
+                <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs text-black font-bold">Visa</div>
+                <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs text-black font-bold">MC</div>
+                <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs text-black font-bold">JCB</div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-300 my-8"></div>
-
-        {/* Middle Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Bus Stations */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Bến xe</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Bến xe Miền Đông</p>
-              <p className="text-gray-500 text-sm">Bến xe Trung tâm Đà Nẵng</p>
-              <p className="text-gray-500 text-sm">Bến xe Gia Lâm</p>
-              <p className="text-gray-500 text-sm">Bến xe Mỹ Đình</p>
-              <p className="text-gray-500 text-sm">Bến xe An Sương</p>
-              <p className="text-gray-500 text-sm">Bến xe Nước Ngầm</p>
-              <p className="text-gray-500 text-sm">Bến xe Miền Tây</p>
-            </div>
-          </div>
-
-          {/* Bus Companies */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Nhà xe</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe Sao Việt</p>
-              <p className="text-gray-500 text-sm">Xe Hoa Mai</p>
-              <p className="text-gray-500 text-sm">Xe Hạ Long Travel</p>
-              <p className="text-gray-500 text-sm">Xe Quốc Đạt</p>
-              <p className="text-gray-500 text-sm">Xe Thanh Bình Xanh</p>
-              <p className="text-gray-500 text-sm">Xe Thiện Thành limousine</p>
-              <p className="text-gray-500 text-sm">Xe Hồng Sơn Phú Yên</p>
-              <p className="text-gray-500 text-sm">Xe Tiến Oanh</p>
-            </div>
-          </div>
-
-          {/* More Companies */}
-          <div className="space-y-2">
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe Hải Âu</p>
-              <p className="text-gray-500 text-sm">Xe Chín Nghĩa</p>
-              <p className="text-gray-500 text-sm">Xe Hưng Long</p>
-              <p className="text-gray-500 text-sm">Xe Kim Mạnh Hùng</p>
-              <p className="text-gray-500 text-sm">Xe Tuấn Hưng</p>
-              <p className="text-gray-500 text-sm">Xe Khanh Phong</p>
-              <p className="text-gray-500 text-sm">Xe An Anh (Quê Hương)</p>
-              <p className="text-gray-500 text-sm">Xe Minh Quốc</p>
-            </div>
-          </div>
-
-          {/* Additional Companies */}
-          <div className="space-y-2">
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Xe Văn Minh</p>
-              <p className="text-gray-500 text-sm">Xe Anh Tuyên</p>
-              <p className="text-gray-500 text-sm">Xe Điền Linh</p>
-              <p className="text-gray-500 text-sm">Xe Hạnh Cafe</p>
-              <p className="text-gray-500 text-sm">Xe Tuấn Nga</p>
-              <p className="text-gray-500 text-sm">Xe Ngọc Ánh Sài Gòn</p>
-              <p className="text-gray-500 text-sm">Xe Hùng Cường</p>
-              <p className="text-gray-500 text-sm">Xe Thuận Tiến</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* About */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Về Chúng Tôi</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Giới Thiệu Kayak</p>
-              <p className="text-gray-500 text-sm">Liên Hệ</p>
-              <p className="text-gray-500 text-sm">Giá trị cốt lõi</p>
-            </div>
-          </div>
-
-          {/* Support */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Hỗ Trợ</h3>
-            <div className="space-y-1">
-              <p className="text-gray-500 text-sm">Chính sách bảo mật</p>
-              <p className="text-gray-500 text-sm">Chính sách điều khoản và giao dịch chung</p>
-              <p className="text-gray-500 text-sm">Chính sách đổi trả và hoàn tiền</p>
-              <p className="text-gray-500 text-sm">Chính sách thanh toán</p>
-              <p className="text-gray-500 text-sm">Quy chế hoạt động</p>
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Liên hệ</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-black text-sm">
-                  <span>Hotline: </span>
-                  <span className="font-bold">1900 0152</span>
-                </p>
-                <p className="text-gray-600 text-xs">(Cước phí: 3.000 đồng/phút)</p>
-              </div>
-              <div>
-                <p className="text-black text-sm">
-                  <span>Hotline: </span>
-                  <span className="font-bold">1900.996.678</span>
-                </p>
-                <p className="text-gray-600 text-xs">(Cước phí: 1.000 đồng/phút)</p>
-              </div>
-              <div>
-                <p className="text-black text-sm">
-                  <span>Hotline: </span>
-                  <span className="font-bold">1900.0179</span>
-                </p>
-                <p className="text-gray-600 text-xs">Cước phí: 8000đ/phút (dịch Vụ đặt vé nhanh 24/7)</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Certifications */}
-          <div className="space-y-2">
-            <h3 className="text-black font-bold text-sm">Chứng nhận</h3>
-            <div className="space-y-2">
-              <div className="w-24 h-14 bg-gray-200 rounded"></div>
-              <div className="w-24 h-11 bg-gray-200 rounded"></div>
-              <div className="w-24 h-9 bg-gray-200 rounded"></div>
-            </div>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
+          <p>&copy; 2026 Kayak Transport Services. All rights reserved.</p>
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><i className="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><i className="fab fa-twitter"></i> Twitter</a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><i className="fab fa-instagram"></i> Instagram</a>
           </div>
         </div>
       </div>

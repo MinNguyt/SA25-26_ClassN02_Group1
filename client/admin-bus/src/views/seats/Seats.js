@@ -41,7 +41,7 @@ const Seats = () => {
     const loadBuses = async () => {
         try {
             const res = await carsAPI.getCars({ limit: 1000 })
-            if (res.success) setBuses(res.responseObject?.results || res.responseObject || [])
+            if (res.success) setBuses(res.data.content || [])
         } catch (e) { console.error(e) }
     }
 
@@ -49,7 +49,7 @@ const Seats = () => {
         try {
             setLoading(true)
             const res = await seatsAPI.getSeatsByCar(busId)
-            if (res.success) setSeats(res.responseObject || [])
+            if (res.success) setSeats(res.data || [])
             else setAlert({ show: true, message: res.message || 'Tải dữ liệu ghế thất bại', type: 'danger' })
         } catch (e) {
             setAlert({ show: true, message: e.message || 'Tải dữ liệu ghế thất bại', type: 'danger' })
@@ -94,7 +94,7 @@ const Seats = () => {
                     <CFormSelect value={selectedBusId} onChange={(e) => setSelectedBusId(e.target.value)} style={{ minWidth: 240 }}>
                         <option value="">Chọn xe</option>
                         {buses.map(b => (
-                            <option key={b.id} value={b.id}>{b.name} - {b.license_plate}</option>
+                            <option key={b.id} value={b.id}>{b.name} - {b.licensePlate}</option>
                         ))}
                     </CFormSelect>
                     <CButton color="primary" onClick={handleGenerate} disabled={!selectedBusId}><CIcon icon={cilCog} className="me-2" />Cấu hình ghế</CButton>
@@ -128,11 +128,11 @@ const Seats = () => {
                             </CTableHead>
                             <CTableBody>
                                 {seats.map((s, idx) => (
-                                    <CTableRow key={`${s.bus_id}-${s.seat_number}`}>
+                                    <CTableRow key={`${s.vehicleId}-${s.seatNumber}`}>
                                         <CTableDataCell>{idx + 1}</CTableDataCell>
-                                        <CTableDataCell>{s.seat_number}</CTableDataCell>
-                                        <CTableDataCell><CBadge color={seatTypeColor(s.seat_type)}>{s.seat_type}</CBadge></CTableDataCell>
-                                        <CTableDataCell>{new Intl.NumberFormat('vi-VN').format(s.price_for_type_seat)} đ</CTableDataCell>
+                                        <CTableDataCell>{s.seatNumber}</CTableDataCell>
+                                        <CTableDataCell><CBadge color={seatTypeColor(s.seatType)}>{s.seatType}</CBadge></CTableDataCell>
+                                        <CTableDataCell>{new Intl.NumberFormat('vi-VN').format(s.priceForTypeSeat)} đ</CTableDataCell>
                                         <CTableDataCell><CBadge color={s.status === 'AVAILABLE' ? 'success' : 'secondary'}>{s.status}</CBadge></CTableDataCell>
                                     </CTableRow>
                                 ))}

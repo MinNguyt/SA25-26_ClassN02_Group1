@@ -20,8 +20,9 @@ const HomeBanner = () => {
             try {
                 const res = await api.getStations({ includeAuth: false, suppressUnauthorizedRedirect: true });
                 if (res.success) {
-                    const payload = res.data;
-                    const list = payload?.responseObject || payload?.data || payload || [];
+                    console.log("res", res)
+                    const payload = res.data.data;
+                    const list = payload?.results || payload?.data || payload || [];
                     setStations(Array.isArray(list) ? list : []);
                 } else {
                     setStationError(res.error || 'Không thể tải danh sách bến xe');
@@ -50,7 +51,7 @@ const HomeBanner = () => {
         <div className="w-full mb-[20%] h-[500px] bg-[#f5f7fa] py-12 px-4 flex flex-col items-center gap-8 justify-start">
             <div className="bg-white rounded-3xl shadow-xl w-full max-w-7xl overflow-hidden flex flex-col lg:flex-row min-h-[500px]">
                 {/* Left Content */}
-                <div className="flex-1 p-8 lg:p-12 flex flex-col justify-center">
+                <div className="flex-1 p-8 flex flex-col justify-center">
                     <h1 className="text-4xl lg:text-5xl font-black text-gray-900 mb-10 leading-tight">
                         Tìm kiếm chuyến xe <br className="hidden lg:block" />an toàn, tiện lợi.
                     </h1>
@@ -143,7 +144,7 @@ const HomeBanner = () => {
 
                 {/* Right Side Image - Masonry Grid */}
                 <div className="hidden lg:flex relative w-[45%] overflow-visible">
-                    <div className="absolute -top-8 -right-8 flex gap-3">
+                    <div className="absolute top-[5%] -right-8 flex gap-3">
                         {/* Column 1 */}
                         <div className="flex flex-col gap-3 mt-12">
                             <img

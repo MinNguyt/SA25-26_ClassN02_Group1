@@ -1,89 +1,104 @@
 import React from 'react';
-import { getImageUrl } from '../../../utils';
 import './TopReviews.css';
 
 const TopReviews = () => {
     const cities = [
         {
             name: 'Sài Gòn',
-            reviews: 287,
-            image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80'
+            reviews: '1.2k',
+            image: 'https://images.unsplash.com/photo-1583417267754-006d0b555e8c?auto=format&fit=crop&w=800&q=80',
+            size: 'large'
         },
         {
             name: 'Vũng Tàu',
-            reviews: 98,
-            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80'
+            reviews: '450',
+            image: 'https://images.unsplash.com/photo-1590457335753-4395638c4228?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
         },
         {
             name: 'Đà Lạt',
-            reviews: 87,
-            image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?fit=crop&w=600&q=80'
+            reviews: '890',
+            image: 'https://images.unsplash.com/photo-1519834015795-037740f900a3?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
         },
         {
             name: 'Quy Nhơn',
-            reviews: 81,
-            image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?fit=crop&w=600&q=80'
-        },
-        {
-            name: 'Hà Nội',
-            reviews: 612,
-            image: 'https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?fit=crop&w=600&q=80'
+            reviews: '320',
+            image: 'https://images.unsplash.com/photo-1566453916963-8dc6d817454f?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
         },
         {
             name: 'Nha Trang',
-            reviews: 557,
-            image: 'https://images.unsplash.com/photo-1463123081488-789f998ac9c4?fit=crop&w=600&q=80'
+            reviews: '670',
+            image: 'https://images.unsplash.com/photo-1559648602-53b05f2b3e8e?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
+        },
+        {
+            name: 'Hà Nội',
+            reviews: '950',
+            image: 'https://images.unsplash.com/photo-1528127222408-4a91964fe271?auto=format&fit=crop&w=800&q=80',
+            size: 'large'
         },
         {
             name: 'Đà Nẵng',
-            reviews: 570,
-            image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?fit=crop&w=600&q=80'
+            reviews: '740',
+            image: 'https://images.unsplash.com/photo-1570513903102-187515322986?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
         },
         {
             name: 'Phan Thiết',
-            reviews: 276,
-            image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a2444?fit=crop&w=600&q=80'
+            reviews: '280',
+            image: 'https://images.unsplash.com/photo-1605707769411-9c6001095034?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
+        },
+        {
+            name: 'Hội An',
+            reviews: '550',
+            image: 'https://images.unsplash.com/photo-1535025639602-980580d85638?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
+        },
+        {
+            name: 'Sa Pa',
+            reviews: '420',
+            image: 'https://images.unsplash.com/photo-1575459388701-a75d5b7a1e05?auto=format&fit=crop&w=600&q=80',
+            size: 'medium'
         }
     ];
 
     const handleCityClick = (cityName) => {
-        // Use navigation logic if needed
         console.log(`Clicked on ${cityName}`);
     };
 
-    // Professional grid, responsive, cards
     return (
-        <section className="py-5 bg-white">
-            <div className="container mx-auto px-4">
-                <div className="mb-10 text-left">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2 border-l-4 border-orange-500 pl-4">Điểm đến nổi bật</h2>
-                    <p className="text-gray-500">Khám phá những thành phố được đánh giá cao nhất</p>
+        <section className="top-reviews">
+            <div className="container">
+                <div className="section-header">
+                    <h2>Điểm đến nổi bật</h2>
+                    <p>Khám phá vẻ đẹp Việt Nam qua những điểm đến được yêu thích nhất</p>
+                    <div className="w-20 h-1 bg-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
+
+                <div className="cities-grid">
                     {cities.map((city, idx) => (
                         <div
                             key={idx}
+                            className={`city-card ${city.size}`}
+                            onClick={() => handleCityClick(city.name)}
                             tabIndex={0}
                             role="button"
-                            aria-label={`Xem ${city.reviews} bài viết về ${city.name}`}
-                            onClick={() => handleCityClick(city.name)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    handleCityClick(city.name);
-                                }
-                            }}
-                            className="group cursor-pointer rounded-2xl shadow-gray-100 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400 selection:bg-orange-100 bg-gray-100"
-                            style={{
-                                background: `url('${city.image}') center/cover`,
-                                position: 'relative',
-                                minHeight: 200
-                            }}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-                            <div className="relative z-20 flex flex-col justify-end h-full p-6">
-                                <h3 className="font-bold text-lg text-white drop-shadow-md mb-1">{city.name}</h3>
-                                <span className="text-white text-sm drop-shadow-sm">{city.reviews} bài viết</span>
+                            <div
+                                className="city-bg"
+                                style={{ backgroundImage: `url('${city.image}')` }}
+                            ></div>
+                            <div className="city-overlay">
+                                <h3 className="city-name">{city.name}</h3>
+                                <div className="city-reviews">
+                                    <span className="review-badge">
+                                        <i className="fas fa-camera mr-2"></i>
+                                        {city.reviews} bài viết
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     ))}

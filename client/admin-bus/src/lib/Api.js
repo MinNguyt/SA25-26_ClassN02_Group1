@@ -195,7 +195,17 @@ export const stationAPI = {
             const response = await apiClient.get('/stations', {
                 params: { page, limit, search, sortBy, order }
             });
-            return response.data;
+            // Handle new ApiResponse format: { success, data: { results, total } }
+            const responseData = response.data;
+            if (responseData.success && responseData.data) {
+                return {
+                    success: true,
+                    stations: responseData.data.results || [],
+                    total: responseData.data.total || 0
+                };
+            }
+            // Fallback for legacy format
+            return responseData;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to fetch stations');
         }
@@ -339,7 +349,17 @@ export const routesAPI = {
                     order
                 }
             });
-            return response.data;
+            // Handle new ApiResponse format: { success, data: { results, total } }
+            const responseData = response.data;
+            if (responseData.success && responseData.data) {
+                return {
+                    success: true,
+                    routes: responseData.data.results || [],
+                    total: responseData.data.total || 0
+                };
+            }
+            // Fallback for legacy format
+            return responseData;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to fetch routes');
         }
@@ -433,7 +453,7 @@ export const carsAPI = {
 
     updateCar: async (id, payload) => {
         try {
-            const response = await apiClient.post(`/vehicles/${id}`, payload, {
+            const response = await apiClient.put(`/vehicles/${id}`, payload, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -489,7 +509,7 @@ export const seatsAPI = {
 
     getSeatsByCar: async (carId) => {
         try {
-            const response = await apiClient.get(`/seats/${carId}`);
+            const response = await apiClient.get(`/seats/vehicle/${carId}`);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to fetch seats');
@@ -498,7 +518,7 @@ export const seatsAPI = {
 
     deleteSeatsByCar: async (carId) => {
         try {
-            const response = await apiClient.delete(`/seats/${carId}`);
+            const response = await apiClient.delete(`/seats/vehicle/${carId}`);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to delete seats');
@@ -507,7 +527,7 @@ export const seatsAPI = {
 
     generateSeatsByCar: async (carId, payload) => {
         try {
-            const response = await apiClient.post(`/vehicles/${carId}/seats`, payload);
+            const response = await apiClient.post(`/seats/vehicle/${carId}/generate`, payload);
             return response.data;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to generate seats');
@@ -518,10 +538,10 @@ export const seatsAPI = {
 // Vehicle Schedules API Service
 export const vehicleSchedulesAPI = {
     getSchedules: async (params = {}) => {
-        const { page = 1, limit = 50, route_id, bus_id, status, sortBy = 'id:asc' } = params;
+        const { page = 1, limit = 50, routeId, busId, status, sortBy = 'id:asc' } = params;
         try {
             const response = await apiClient.get('/vehicle-schedules', {
-                params: { page, limit, route_id, bus_id, status, sortBy }
+                params: { page, limit, routeId, busId, status, sortBy }
             });
             return response.data;
         } catch (error) {

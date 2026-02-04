@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { vehicleSchedulesAPI } from '../../lib/Api'
 
-// Align with DB: route_id, bus_id, is_active (boolean)
-const defaultForm = { route_id: '', bus_id: '', is_active: true, departure_time: '' }
+// Align with backend: routeId, busId, isActive (boolean), departureTime
+const defaultForm = { routeId: '', busId: '', isActive: true, departureTime: '' }
 
 const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars = [] }) => {
     const [form, setForm] = useState(defaultForm)
@@ -12,10 +12,10 @@ const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars 
     useEffect(() => {
         if (initialData) {
             setForm({
-                route_id: initialData.route_id || '',
-                bus_id: initialData.bus_id || '',
-                is_active: initialData.is_active ?? true,
-                departure_time: initialData.departure_time ? new Date(initialData.departure_time).toISOString().slice(0, 16) : '',
+                routeId: initialData.routeId || '',
+                busId: initialData.busId || '',
+                isActive: initialData.isActive ?? true,
+                departureTime: initialData.departureTime ? new Date(initialData.departureTime).toISOString().slice(0, 16) : '',
             })
         } else {
             setForm(defaultForm)
@@ -28,10 +28,10 @@ const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars 
         setError('')
         try {
             const payload = {
-                route_id: Number(form.route_id),
-                bus_id: Number(form.bus_id),
-                is_active: Boolean(form.is_active),
-                departure_time: form.departure_time ? new Date(form.departure_time).toISOString() : null,
+                routeId: Number(form.routeId),
+                busId: Number(form.busId),
+                isActive: Boolean(form.isActive),
+                departureTime: form.departureTime ? new Date(form.departureTime).toISOString() : null,
             }
             const data = initialData?.id
                 ? await vehicleSchedulesAPI.updateSchedule(initialData.id, payload)
@@ -61,11 +61,11 @@ const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars 
 
                             <div className="mb-3">
                                 <label className="form-label">Tuyến</label>
-                                <select className="form-select" value={form.route_id} onChange={e => setForm(f => ({ ...f, route_id: e.target.value }))} required>
+                                <select className="form-select" value={form.routeId} onChange={e => setForm(f => ({ ...f, routeId: e.target.value }))} required>
                                     <option value="">Chọn tuyến</option>
                                     {routes.map(r => (
                                         <option key={r.id} value={r.id}>
-                                            {(r.departure_name || 'N/A') + ' → ' + (r.arrival_name || 'N/A')}
+                                            {(r.departureStation.name || 'N/A') + ' → ' + (r.arrivalStation.name || 'N/A')}
                                         </option>
                                     ))}
                                 </select>
@@ -73,7 +73,7 @@ const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars 
 
                             <div className="mb-3">
                                 <label className="form-label">Xe</label>
-                                <select className="form-select" value={form.bus_id} onChange={e => setForm(f => ({ ...f, bus_id: e.target.value }))} required>
+                                <select className="form-select" value={form.busId} onChange={e => setForm(f => ({ ...f, busId: e.target.value }))} required>
                                     <option value="">Chọn xe</option>
                                     {cars.map(c => (
                                         <option key={c.id} value={c.id}>
@@ -88,14 +88,14 @@ const ScheduleModal = ({ open, onClose, onSaved, initialData, routes = [], cars 
                                 <input
                                     type="datetime-local"
                                     className="form-control"
-                                    value={form.departure_time}
-                                    onChange={e => setForm(f => ({ ...f, departure_time: e.target.value }))}
+                                    value={form.departureTime}
+                                    onChange={e => setForm(f => ({ ...f, departureTime: e.target.value }))}
                                     required
                                 />
                             </div>
 
                             <div className="form-check mb-3">
-                                <input className="form-check-input" type="checkbox" id="isActiveCheck" checked={!!form.is_active} onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))} />
+                                <input className="form-check-input" type="checkbox" id="isActiveCheck" checked={!!form.isActive} onChange={e => setForm(f => ({ ...f, isActive: e.target.checked }))} />
                                 <label className="form-check-label" htmlFor="isActiveCheck">
                                     Kích hoạt
                                 </label>

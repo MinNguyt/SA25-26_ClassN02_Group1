@@ -64,6 +64,7 @@ const BusManagement = () => {
         loadCars()
     }, [page, limit, search, companyFilter, sortBy, order])
     console.log("companies", companies);
+    console.log("cars", cars);
     const loadCompanies = async () => {
         try {
             const res = await busCompanyAPI.getCompanies({ limit: 1000 })
@@ -80,9 +81,10 @@ const BusManagement = () => {
         try {
             setLoading(true)
             const res = await carsAPI.getCars({ page, limit, search, sortBy, order, company_id: companyFilter || undefined })
-            if (res.carList || res.success) {
-                const results = res.carList || res.responseObject?.results || res.responseObject || []
-                const total = res.total || res.responseObject?.total || results.length
+            if (res && res.data && res.success) {
+                const results = res.data.content || []
+                const total = results.length;
+                console.log("result", results, total);
                 setCars(results)
                 setTotalPages(Math.max(1, Math.ceil(total / limit)))
 
@@ -161,11 +163,11 @@ const BusManagement = () => {
     }
 
     const companyName = (companyId) => {
-        console.log('companies find', companies);
+
         console.log(companyId);
         const c = companies.find(x => x.id === companyId)
-        console.log("c name", c);
-        return c ? c.company_name || c.name : `Company ${companyId}`
+
+        return c ? c.companyName || c.name : `Company ${companyId}`
     }
 
     return (
@@ -287,13 +289,13 @@ const BusManagement = () => {
                                             <CTableDataCell>
                                                 <div className="d-flex align-items-center gap-2">
                                                     <div style={{ width: 48, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid #eee' }}>
-                                                        <img src={car.featured_image ? `${window.location.origin}${car.featured_image}` : '/image/bus-placeholder.png'} alt={car.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                        <img src={`http://localhost:8080/files/${car.featuredImage}`} alt={car.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                     </div>
                                                     <strong>{car.name}</strong>
                                                 </div>
                                             </CTableDataCell>
-                                            <CTableDataCell>{companyName(car.company_id || car.busCompany.id || 0)}</CTableDataCell>
-                                            <CTableDataCell><CBadge color="info">{car.license_plate}</CBadge></CTableDataCell>
+                                            <CTableDataCell>{companyName(car.companyId || car.busCompany.id || 0)}</CTableDataCell>
+                                            <CTableDataCell><CBadge color="info">{car.licensePlate}</CBadge></CTableDataCell>
                                             <CTableDataCell><CBadge color="warning">{car.capacity}</CBadge></CTableDataCell>
                                             <CTableDataCell>
                                                 <div className="d-flex gap-1">

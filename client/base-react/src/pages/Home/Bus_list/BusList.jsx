@@ -12,7 +12,7 @@ const initialFilters = {
     departureDate: '',
     bus_id: '',
     priceRange: '',
-    sortBy: 'departure_time:asc',
+    sortBy: 'departureTime:asc',
     page: 1,
     limit: 20
 };
@@ -63,7 +63,7 @@ export default function BusList() {
             const res = await api.getStations({ includeAuth: false, suppressUnauthorizedRedirect: true });
             if (res.success) {
                 const payload = res.data;
-                const list = payload?.responseObject || payload?.data || payload || [];
+                const list = payload?.data.results || payload?.data || payload || [];
                 setStations(Array.isArray(list) ? list : []);
             }
         } catch (e) { console.error(e); }
@@ -76,7 +76,8 @@ export default function BusList() {
             const res = await api.getCars({ includeAuth: false, suppressUnauthorizedRedirect: true });
             if (res.success) {
                 const payload = res.data;
-                const list = payload?.responseObject?.results || payload?.data || payload || [];
+                console.log("pay", payload.data.content)
+                const list = payload?.data.content || payload?.data || payload || [];
                 setCars(Array.isArray(list) ? list : []);
             }
         } catch (e) { console.error(e); }
@@ -89,7 +90,8 @@ export default function BusList() {
         try {
             const res = await api.getVehicleSchedules({ ...queryParams, includeAuth: false, suppressUnauthorizedRedirect: true });
             if (res.success) {
-                const list = res.data?.responseObject?.results || res.data?.results || [];
+                console.log("123", res.data.data.results)
+                const list = res.data.data.results || res.data?.results || res.data?.results || [];
                 setSchedules(list);
             } else {
                 setError(res.error || 'Không thể tải lịch trình');
@@ -127,7 +129,7 @@ export default function BusList() {
 
     const styles = {
         pageWrapper: { minHeight: '100vh', background: '#f8fafc', fontFamily: "'Segoe UI', 'Roboto', -apple-system, sans-serif" },
-        heroSection: { background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #0ea5e9 100%)', padding: '48px 0 60px', position: 'relative', overflow: 'hidden' },
+        heroSection: { background: 'rgba(249, 115, 22,0.7)', padding: '48px 0 60px', position: 'relative', overflow: 'hidden' },
         heroDecor: { position: 'absolute', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)', top: '-300px', right: '-200px' },
         heroContent: { maxWidth: '1280px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 },
         heroTitle: { fontSize: '36px', fontWeight: '700', color: '#fff', marginBottom: '8px' },
@@ -279,41 +281,49 @@ export default function BusList() {
                         </div>
                     )}
 
-                    {schedules.map((s) => (
-                        <div key={s.id} style={styles.tripCard} className="trip-card"
-                            onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'}
-                            onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)'}>
-                            <div style={styles.tripCardInner} className="trip-card-inner">
-                                <div style={styles.tripImage}>
-                                    <img src={s.bus_featured_image ? getImageUrl(s.bus_featured_image) : '/image/bus-placeholder.png'} alt={s.bus_name || 'Bus'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                </div>
-                                <div style={styles.tripInfo}>
-                                    <div style={styles.tripCompany}>Mã chuyến: #{s.id}</div>
-                                    <h3 style={styles.tripName}>{s.bus_name || 'Xe khách'}</h3>
-                                    <div style={styles.tripRoute}>
-                                        <div style={styles.routePoint}><span style={styles.routeDot}></span><span style={styles.routeText}>{getStationName(s.departure_station_id) || 'Điểm đi'}</span></div>
-                                        <span style={styles.routeArrow}>→</span>
-                                        <div style={styles.routePoint}><span style={{ ...styles.routeDot, background: '#10b981' }}></span><span style={styles.routeText}>{getStationName(s.arrival_station_id) || 'Điểm đến'}</span></div>
+                    {schedules.map((s) => {
+                        const car = cars.find(c => c.id === s.busId);
+                        const busName = car?.name || 'Xe khách';
+                        const busImage = car?.featuredImage;
+                        console.log("car", car)
+
+
+                        return (
+                            <div key={s.id} style={styles.tripCard} className="trip-card"
+                                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'}
+                                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)'}>
+                                <div style={styles.tripCardInner} className="trip-card-inner">
+                                    <div style={styles.tripImage}>
+                                        <img src={busImage ? `http://localhost:8080/files/${busImage}` : '/image/bus-placeholder.png'} alt={busName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
-                                    <div style={styles.tripMeta}>
-                                        <div style={styles.metaItem}><span style={styles.metaIcon}>🕐</span>{s.departure_time ? new Date(s.departure_time).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : 'N/A'}</div>
-                                        <div style={styles.metaItem}><span style={styles.metaIcon}>🚌</span>Xe #{s.bus_id}</div>
-                                        <div style={styles.metaItem}><span style={styles.metaIcon}>🛣️</span>Tuyến #{s.route_id}</div>
+                                    <div style={styles.tripInfo}>
+                                        <div style={styles.tripCompany}>Mã chuyến: #{s.id}</div>
+                                        <h3 style={styles.tripName}>{busName}</h3>
+                                        <div style={styles.tripRoute}>
+                                            <div style={styles.routePoint}><span style={styles.routeDot}></span><span style={styles.routeText}>{s.routeId ? `Tuyến ${s.routeId}` : 'Điểm đi'}</span></div>
+                                            <span style={styles.routeArrow}>→</span>
+                                            <div style={styles.routePoint}><span style={{ ...styles.routeDot, background: '#10b981' }}></span><span style={styles.routeText}>Tuyến 2</span></div>
+                                        </div>
+                                        <div style={styles.tripMeta}>
+                                            <div style={styles.metaItem}><span style={styles.metaIcon}>🕐</span>{s.departureTime ? new Date(s.departureTime).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : 'N/A'}</div>
+                                            <div style={styles.metaItem}><span style={styles.metaIcon}>🚌</span>Xe #{s.busId}</div>
+                                            <div style={styles.metaItem}><span style={styles.metaIcon}>🛣️</span>Tuyến #{s.routeId}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style={styles.tripActions} className="trip-actions">
-                                    <div style={styles.tripPrice}>
-                                        <div style={styles.priceLabel}>Giá từ</div>
-                                        <div style={styles.priceValue}>{s.base_price ? Number(s.base_price).toLocaleString('vi-VN') + '₫' : 'Liên hệ'}</div>
-                                    </div>
-                                    <div style={styles.actionButtons}>
-                                        <button style={styles.detailBtn} onClick={() => navigate(`/car-detail/${s.bus_id}`)}>Chi tiết</button>
-                                        <button style={styles.bookBtn} onClick={() => handleOpenSeats(s)}>Đặt vé</button>
+                                    <div style={styles.tripActions} className="trip-actions">
+                                        <div style={styles.tripPrice}>
+                                            <div style={styles.priceLabel}>Giá từ</div>
+                                            <div style={styles.priceValue}>{s.price ? Number(s.price).toLocaleString('vi-VN') + '₫' : '300.000 vnđ'}</div>
+                                        </div>
+                                        <div style={styles.actionButtons}>
+                                            <button style={styles.detailBtn} onClick={() => navigate(`/car-detail/${s.busId}`)}>Chi tiết</button>
+                                            <button style={styles.bookBtn} onClick={() => handleOpenSeats(s)}>Đặt vé</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </main>
             </div>
 

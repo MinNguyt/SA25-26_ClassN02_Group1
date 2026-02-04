@@ -25,14 +25,14 @@ const PopularRoutes = () => {
     useEffect(() => {
         fetchPopularRoutes();
     }, []);
-
+    console.log("popularroute", popularRoutes)
     const fetchPopularRoutes = async () => {
         try {
 
             const response = await apiService.getRoutes();
             console.log(response);
             if (response.success) {
-                setPopularRoutes(response.data.responseObject.results);
+                setPopularRoutes(response.data.data.results || []);
             } else {
                 setError('Failed to fetch popular routes');
             }

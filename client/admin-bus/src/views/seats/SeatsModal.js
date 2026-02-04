@@ -28,9 +28,9 @@ const SEAT_TYPES = [
 const SeatsModal = ({ visible, onClose, onSuccess, busId }) => {
     const [capacity, setCapacity] = useState(null)
     const [configs, setConfigs] = useState([
-        { seat_type: 'LUXURY', quantity: '', price: '' },
-        { seat_type: 'VIP', quantity: '', price: '' },
-        { seat_type: 'STANDARD', quantity: '', price: '' }
+        { seatType: 'LUXURY', quantity: '', price: '' },
+        { seatType: 'VIP', quantity: '', price: '' },
+        { seatType: 'STANDARD', quantity: '', price: '' }
     ])
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false)
@@ -41,7 +41,7 @@ const SeatsModal = ({ visible, onClose, onSuccess, busId }) => {
             if (!visible || !busId) return
             try {
                 const res = await carsAPI.getCar(busId)
-                if (res.success) setCapacity(res.responseObject?.capacity ?? res.responseObject?.car?.capacity ?? null)
+                if (res.success) setCapacity(res.data.capacity ?? null)
             } catch (_) { }
         }
         fetchCar()
@@ -78,7 +78,7 @@ const SeatsModal = ({ visible, onClose, onSuccess, busId }) => {
         setAlert({ show: false, message: '', type: 'success' })
         try {
             const payload = {
-                seat_config: configs.map(c => ({ seat_type: c.seat_type, quantity: parseInt(c.quantity), price: parseInt(c.price) }))
+                seatConfig: configs.map(c => ({ seatType: c.seatType, quantity: parseInt(c.quantity), price: parseInt(c.price) }))
             }
             await seatsAPI.generateSeatsByCar(busId, payload)
             setAlert({ show: true, message: 'Đã tạo cấu hình ghế cho xe', type: 'success' })
@@ -112,7 +112,7 @@ const SeatsModal = ({ visible, onClose, onSuccess, busId }) => {
                         <CRow key={idx} className="mb-3">
                             <CCol md={4}>
                                 <CFormLabel>Loại ghế</CFormLabel>
-                                <CFormSelect value={cfg.seat_type} onChange={(e) => setConfig(idx, 'seat_type', e.target.value)} disabled={loading}>
+                                <CFormSelect value={cfg.seatType} onChange={(e) => setConfig(idx, 'seatType', e.target.value)} disabled={loading}>
                                     {SEAT_TYPES.map(t => (<option key={t.value} value={t.value}>{t.label}</option>))}
                                 </CFormSelect>
                             </CCol>

@@ -36,7 +36,7 @@ public class VehicleController {
                 .page(page)
                 .limit(limit)
                 .search(search)
-                .companyId(companyId)
+                .company_id(companyId)
                 .build();
 
         return ResponseEntity.ok(ApiResponse.success(vehicleService.getAllVehicles(query)));
@@ -51,7 +51,7 @@ public class VehicleController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Create a new vehicle")
     public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(
-            @Valid @RequestPart("data") VehicleCreateDTO request,
+            @Valid @ModelAttribute VehicleCreateDTO request,
             @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -63,7 +63,7 @@ public class VehicleController {
     @Operation(summary = "Update a vehicle")
     public ResponseEntity<ApiResponse<VehicleResponseDTO>> updateVehicle(
             @PathVariable Integer id,
-            @Valid @RequestPart("data") VehicleUpdateDTO request,
+            @Valid @ModelAttribute VehicleUpdateDTO request,
             @RequestPart(value = "featuredImage", required = false) MultipartFile featuredImage) {
 
         return ResponseEntity.ok(ApiResponse.success(vehicleService.updateVehicle(id, request, featuredImage),

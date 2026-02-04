@@ -27,16 +27,17 @@ public class VehicleService {
     private final BusCompanyRepository busCompanyRepository;
     private final FileStorageService fileStorageService;
 
+    @Transactional(readOnly = true)
     public Page<VehicleResponseDTO> getAllVehicles(VehicleQueryDTO query) {
         log.info("Fetching vehicles with page={}, limit={}, search={}, companyId={}",
-                query.getPage(), query.getLimit(), query.getSearch(), query.getCompanyId());
+                query.getPage(), query.getLimit(), query.getSearch(), query.getCompany_id());
 
         Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
         Page<Vehicle> vehicles;
 
-        if (query.getCompanyId() != null) {
+        if (query.getCompany_id() != null) {
             vehicles = vehicleRepository.findByCompanyIdWithPagination(
-                    pageable, query.getCompanyId(), query.getSearch());
+                    pageable, query.getCompany_id(), query.getSearch());
         } else {
             vehicles = vehicleRepository.findAllByPagination(pageable, query.getSearch());
         }
@@ -44,6 +45,7 @@ public class VehicleService {
         return vehicles.map(VehicleResponseDTO::fromEntity);
     }
 
+    @Transactional(readOnly = true)
     public VehicleResponseDTO getVehicleById(Integer id) {
         log.info("Fetching vehicle by id={}", id);
         Vehicle vehicle = vehicleRepository.findById(id)
@@ -53,11 +55,11 @@ public class VehicleService {
 
     @Transactional
     public VehicleResponseDTO createVehicle(VehicleCreateDTO request, MultipartFile featuredImage) {
-        log.info("Creating new vehicle: {} for company: {}", request.getName(), request.getCompanyId());
+        log.info("Creating new vehicle: {} for company: {}", request.getName(), request.getCompany_id());
 
-        BusCompany company = busCompanyRepository.findById(request.getCompanyId())
+        BusCompany company = busCompanyRepository.findById(request.getCompany_id())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Bus company not found with id: " + request.getCompanyId()));
+                        "Bus company not found with id: " + request.getCompany_id()));
 
         String imagePath = "";
         if (featuredImage != null && !featuredImage.isEmpty()) {
@@ -102,10 +104,10 @@ public class VehicleService {
         if (request.getMarkdownHtml() != null) {
             vehicle.setMarkdownHtml(request.getMarkdownHtml());
         }
-        if (request.getCompanyId() != null) {
-            BusCompany company = busCompanyRepository.findById(request.getCompanyId())
+        if (request.getCompany_id() != null) {
+            BusCompany company = busCompanyRepository.findById(request.getCompany_id())
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            "Bus company not found with id: " + request.getCompanyId()));
+                            "Bus company not found with id: " + request.getCompany_id()));
             vehicle.setBusCompany(company);
         }
 

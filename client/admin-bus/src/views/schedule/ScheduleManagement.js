@@ -14,7 +14,7 @@ const ScheduleManagement = () => {
     const routeMap = useMemo(() => {
         const map = new Map()
         routes.forEach(r => {
-            const label = `${r.departure_name || 'N/A'} → ${r.arrival_name || 'N/A'}`
+            const label = `${r.departureStation.name || 'N/A'} → ${r.arrivalStation.name || 'N/A'}`
             map.set(r.id, label)
         })
         return map
@@ -37,10 +37,10 @@ const ScheduleManagement = () => {
                 routesAPI.getRoutes({ limit: 100 }),
                 carsAPI.getCars({ limit: 100 }),
             ])
-            console.log('res', schRes, routeRes, routeRes)
-            const schData = schRes?.responseObject?.results || schRes?.responseObject || schRes?.results || []
-            const rData = routeRes?.responseObject?.results || routeRes?.responseObject || routeRes?.results || []
-            const cData = carRes?.responseObject?.results || carRes?.responseObject || carRes?.results || []
+            console.log('res', schRes, routeRes, carRes)
+            const schData = schRes?.data?.results || schRes?.results || []
+            const rData = routeRes?.data?.routes || routeRes?.routes || []
+            const cData = carRes?.data?.content || carRes?.content || []
 
             setSchedules(schData)
             setRoutes(rData)
@@ -106,9 +106,9 @@ const ScheduleManagement = () => {
                         </thead>
                         <tbody>
                             {schedules.map((s) => {
-                                const routeLabel = routeMap.get(s.route_id) || s.route_id
-                                const carInfo = carMap.get(s.bus_id)
-                                const dt = s.departure_time ? new Date(s.departure_time) : null
+                                const routeLabel = routeMap.get(s.routeId) || s.routeId
+                                const carInfo = carMap.get(s.busId)
+                                const dt = s.departureTime ? new Date(s.departureTime) : null
                                 const formatted = dt && !Number.isNaN(dt.getTime())
                                     ? `${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth() + 1).toString().padStart(2, '0')}/${dt.getFullYear()} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`
                                     : '—'
@@ -116,9 +116,9 @@ const ScheduleManagement = () => {
                                     <tr key={s.id}>
                                         <td>{s.id}</td>
                                         <td>{routeLabel}</td>
-                                        <td>{carInfo?.name || s.bus_id}</td>
+                                        <td>{carInfo?.name || s.busId}</td>
                                         <td>{formatted}</td>
-                                        <td>{s.is_active ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
+                                        <td>{s.isActive ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
                                         <td>
                                             <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => openEdit(s)}>Sửa</button>
                                             <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(s.id)}>Xóa</button>

@@ -303,9 +303,9 @@ class ApiService {
         return this.get(API_ENDPOINTS.GET_ROUTES);
     }
 
-    // Get buses by route
+    // Get buses by route (using schedules)
     async getBusesByRoute(routeId) {
-        return this.get(API_ENDPOINTS.GET_BUSES_BY_ROUTE.replace(':routeId', routeId));
+        return this.get(`${API_ENDPOINTS.VEHICLE_SCHEDULES}?routeId=${routeId}`);
     }
 
     // Get available seats
@@ -320,7 +320,7 @@ class ApiService {
 
     // Cancel ticket
     async cancelTicket(ticketId, reason) {
-        return this.post(API_ENDPOINTS.CANCEL_TICKET.replace(':ticketId', ticketId), { reason });
+        return this.put(API_ENDPOINTS.CANCEL_TICKET.replace(':ticketId', ticketId), { reason });
     }
 
     // Search ticket by ID and phone number
@@ -409,22 +409,23 @@ class ApiService {
 
     // Get car by ID
     async getCarById(id) {
-        return this.get(`/cars/${id}`, { includeAuth: false });
+        return this.get(`/vehicle/${id}`, { includeAuth: false });
     }
 
-    // Get cars with optional filters
+    // Get vehicles with optional filters
     async getCars(params = {}) {
         const queryString = new URLSearchParams(params).toString();
-        const endpoint = queryString ? `/cars?${queryString}` : '/cars';
+        const endpoint = queryString ? `/vehicles?${queryString}` : '/vehicles';
         return this.get(endpoint, { includeAuth: false });
     }
 
-    // Get cars by company ID
+    // Get vehicles by company ID
     async getCarsByCompanyId(companyId, params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        const endpoint = queryString
-            ? `/cars/company/${companyId}?${queryString}`
-            : `/cars/company/${companyId}`;
+        const queryParams = new URLSearchParams(params);
+        if (companyId) {
+            queryParams.append('companyId', companyId);
+        }
+        const endpoint = `${API_ENDPOINTS.CARS}?${queryParams.toString()}`;
         return this.get(endpoint, { includeAuth: false });
     }
 

@@ -9,7 +9,7 @@ export default function PaymentModal({ open, onClose, ticket, schedule, selected
     const [isBooking, setIsBooking] = useState(false);
 
     // Calculate total amount
-    const totalAmount = 2000;
+    const totalAmount = ticket?.totalPrice || ticket?.total_price || 2000;
     const bank = 'MBBank';
     const accountNumber = '0383984836';
     const content = `DH${ticket?.id || 'NEW'}`;
@@ -37,10 +37,12 @@ export default function PaymentModal({ open, onClose, ticket, schedule, selected
             );
             console.log("pooling response", response)
             if (response.success && response.data) {
-                const { status } = response.data.responseObject;
+                // The status is directly returned as responseObject in the ApiResponse
+                // TicketController returns ApiResponse<TicketStatus>, so data.responseObject is the status
+                const status = response.data.responseObject || response.data;
                 setPaymentStatus(status);
 
-                if (status === 'BOOKED') {
+                if (String(status) === 'BOOKED') {
                     setIsPolling(false);
                     // Show success message
                     setTimeout(() => {

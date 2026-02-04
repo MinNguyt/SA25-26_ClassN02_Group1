@@ -32,7 +32,7 @@ public class GatewayConfig {
                 return builder.routes()
                                 // Static Files - Serve uploaded images from fleet-service
                                 .route("fleet-service-files", r -> r
-                                                .path("/files/**")
+                                                .path("/files/vehicle/**", "/files/bus_company/**")
                                                 .uri("http://localhost:8082"))
 
                                 // Identity Service - Authentication endpoints
@@ -57,15 +57,27 @@ public class GatewayConfig {
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8082"))
 
-                                // Route Service
-                                .route("route-service", r -> r
+                                // Route Service - Routes
+                                .route("route-service-routes", r -> r
                                                 .path("/api/routes/**")
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8083"))
 
-                                // Schedule Service
+                                // Route Service - Stations
+                                .route("route-service-stations", r -> r
+                                                .path("/api/stations/**")
+                                                .filters(f -> f.stripPrefix(1))
+                                                .uri("http://localhost:8083"))
+
+                                // Route Service - Static Files
+                                .route("route-service-files", r -> r
+                                                .path("/files/station/**")
+
+                                                .uri("http://localhost:8083"))
+
+                                // Schedule Service - Vehicle Schedules
                                 .route("schedule-service", r -> r
-                                                .path("/api/schedules/**")
+                                                .path("/api/vehicle-schedules/**")
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8084"))
 
@@ -86,6 +98,12 @@ public class GatewayConfig {
                                                 .path("/api/chatbot/**")
                                                 .filters(f -> f.stripPrefix(1))
                                                 .uri("http://localhost:8087"))
+
+                                // Ticket Service
+                                .route("ticket-service", r -> r
+                                                .path("/api/tickets/**")
+                                                .filters(f -> f.stripPrefix(1))
+                                                .uri("http://localhost:8085"))
 
                                 .build();
         }

@@ -22,7 +22,7 @@ public class VehicleCreateDTO {
     private Integer capacity;
 
     @NotNull(message = "Company ID is required")
-    private Integer companyId;
+    private Integer company_id;
 
     private String markdownContent;
     private String markdownHtml;

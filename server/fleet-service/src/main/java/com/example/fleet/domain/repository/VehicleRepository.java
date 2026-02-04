@@ -15,11 +15,11 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
         List<Vehicle> findByBusCompanyId(Integer companyId);
 
-        @Query("SELECT v FROM Vehicle v WHERE " +
+        @Query("SELECT v FROM Vehicle v LEFT JOIN FETCH v.busCompany WHERE " +
                         "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
         Page<Vehicle> findAllByPagination(Pageable pageable, @Param("search") String search);
 
-        @Query("SELECT v FROM Vehicle v WHERE v.busCompany.id = :companyId AND " +
+        @Query("SELECT v FROM Vehicle v LEFT JOIN FETCH v.busCompany WHERE v.busCompany.id = :companyId AND " +
                         "(:search IS NULL OR :search = '' OR v.name LIKE CONCAT('%', :search, '%'))")
         Page<Vehicle> findByCompanyIdWithPagination(
                         Pageable pageable,

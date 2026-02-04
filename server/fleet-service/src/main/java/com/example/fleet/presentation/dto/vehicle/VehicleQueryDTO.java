@@ -13,5 +13,5 @@ public class VehicleQueryDTO {
     private int page = 1;
     private int limit = 10;
     private String search;
-    private Integer companyId;
+    private Integer company_id;
 }

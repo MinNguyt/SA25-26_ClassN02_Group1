@@ -25,14 +25,14 @@ const PopularBusCompany = () => {
         fetchPopularBusCompanies();
 
     }, []);
-
+    console.log('pub', popularBusCompanies)
     const fetchPopularBusCompanies = async () => {
         try {
 
             const response = await apiService.getBusCompanies();
-            console.log(response);
+            console.log("pupBus", response);
             if (response.success) {
-                setPopularBusCompanies(response.data.responseObject);
+                setPopularBusCompanies(response.data.data.content || []);
             } else {
                 setError('Failed to fetch popular routes');
             }
@@ -182,7 +182,7 @@ const BusCompanyCard = ({ busCompany }) => {
     const handleCardClick = () => {
         navigate(`/bus-company-detail/${busCompany.id}`);
     };
-
+    console.log("ele", busCompany)
     return (
         <div
             className="cursor-pointer bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
@@ -191,8 +191,8 @@ const BusCompanyCard = ({ busCompany }) => {
             {/* Route Image */}
             <div className="relative h-48 overflow-hidden">
                 <img
-                    src={getImageUrl(`${busCompany.image}`)}
-                    alt={`${busCompany.company_name}`}
+                    src={`http://localhost:8080/files${busCompany.image}`}
+                    alt={`${busCompany.companyName}`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     {...createImageLoader()}
                 />
@@ -201,7 +201,7 @@ const BusCompanyCard = ({ busCompany }) => {
             {/* Route Details */}
             <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    {busCompany.company_name}
+                    {busCompany.companyName}
                 </h3>
             </div>
         </div>

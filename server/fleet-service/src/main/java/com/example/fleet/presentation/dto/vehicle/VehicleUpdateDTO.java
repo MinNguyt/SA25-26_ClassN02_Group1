@@ -13,7 +13,7 @@ public class VehicleUpdateDTO {
     private String name;
     private String licensePlate;
     private Integer capacity;
-    private Integer companyId;
+    private Integer company_id;
     private String markdownContent;
     private String markdownHtml;
 }

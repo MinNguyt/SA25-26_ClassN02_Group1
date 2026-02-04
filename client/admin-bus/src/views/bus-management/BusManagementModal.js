@@ -36,7 +36,7 @@ const BusManagementModal = ({ visible, onClose, onSuccess, mode = 'create', edit
     const fileInputRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState({ show: false, message: '', type: 'success' })
-
+    console.log("companies", companies);
     useEffect(() => {
         if (visible) {
             if (mode === 'edit' && editData) {
@@ -95,13 +95,13 @@ const BusManagementModal = ({ visible, onClose, onSuccess, mode = 'create', edit
 
             let data = new FormData();
             data.append("name", formData.name);
-            data.append("featured_image", imageFile);
-            data.append("license_plate", formData.license_plate);
+            data.append("featuredImage", imageFile);
+            data.append("licensePlate", formData.license_plate);
             data.append("capacity", formData.capacity);
             data.append("company_id", formData.company_id);
             data.append("description", formData.description);
-            data.append("markdown_content", formData.markdown_content);
-            data.append("markdown_html", formData.markdown_content ? md.render(formData.markdown_content) : undefined);
+            data.append("markdownContent", formData.markdown_content);
+            data.append("markdownHtml", formData.markdown_content ? md.render(formData.markdown_content) : undefined);
 
             let carId = editData?.id
             if (mode === 'edit') {
@@ -166,7 +166,7 @@ const BusManagementModal = ({ visible, onClose, onSuccess, mode = 'create', edit
                                 <CFormSelect id="company_id" name="company_id" value={formData.company_id} onChange={handleChange} invalid={!!errors.company_id} disabled={loading}>
                                     <option value="">Chọn nhà xe</option>
                                     {companies.map(c => (
-                                        <option key={c.id} value={c.id}>{c.company_name || c.name}</option>
+                                        <option key={c.id} value={c.id}>{c.companyName || c.name}</option>
                                     ))}
                                 </CFormSelect>
                                 {errors.company_id && (<CFormFeedback invalid>{errors.company_id}</CFormFeedback>)}

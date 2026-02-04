@@ -11,7 +11,8 @@ export default function SeatListModal({ open, onClose, schedule }) {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [createdTicket, setCreatedTicket] = useState(null);
 
-    const busId = useMemo(() => schedule?.bus_id, [schedule]);
+    // Support both naming conventions
+    const busId = useMemo(() => schedule?.busId || schedule?.bus_id, [schedule]);
 
     useEffect(() => {
         if (!open || !busId) return;
@@ -19,6 +20,7 @@ export default function SeatListModal({ open, onClose, schedule }) {
             setLoading(true);
             setError('');
             try {
+                // Endpoint SEAT_DETAILS is now /seats/vehicle/:id
                 const res = await api.get(API_ENDPOINTS.SEAT_DETAILS.replace(':id', busId), { includeAuth: false, suppressUnauthorizedRedirect: true });
                 if (res.success) {
                     const payload = res.data;
@@ -41,15 +43,23 @@ export default function SeatListModal({ open, onClose, schedule }) {
         setSelectedSeatId(prev => prev === seat.id ? null : seat.id);
     };
 
+    const selectedSeat = selectedSeatId ? seats.find(seat => seat.id === selectedSeatId) : null;
+
     const handleBook = async () => {
         if (!selectedSeatId) { setError('Vui lòng chọn một ghế'); return; }
         setLoading(true);
         setError('');
         try {
-            const bookingData = { schedule_id: schedule.id, seat_id: selectedSeatId, payment_method: 'ONLINE' };
+            const bookingData = {
+                schedule_id: schedule.id,
+                seat_id: selectedSeatId,
+                price: selectedSeat?.priceForTypeSeat || 0, // Add price as required by TicketCreateDTO
+                payment_method: 'ONLINE' // Kept for reference or future use
+            };
             const response = await api.post(API_ENDPOINTS.BOOK_TICKET, bookingData, { includeAuth: true });
             if (response.success && response.data) {
-                setCreatedTicket(response.data.responseObject);
+                // Assuming response.data is ApiResponse<Ticket>
+                setCreatedTicket(response.data.responseObject || response.data);
                 setShowPaymentModal(true);
             } else {
                 setError(response.message || 'Đặt vé thất bại');
@@ -62,9 +72,9 @@ export default function SeatListModal({ open, onClose, schedule }) {
     };
 
     const handleClosePaymentModal = () => { setShowPaymentModal(false); setCreatedTicket(null); onClose?.(); };
-    const selectedSeat = selectedSeatId ? seats.find(seat => seat.id === selectedSeatId) : null;
+
+    // Calculate stats
     const availableCount = seats.filter(s => !s.status || String(s.status).toUpperCase() === 'AVAILABLE').length;
-    const bookedCount = seats.length - availableCount;
 
     if (!open) return null;
 
@@ -124,7 +134,7 @@ export default function SeatListModal({ open, onClose, schedule }) {
                     <div style={styles.tripInfo}>
                         <div style={styles.tripInfoItem}>
                             <div style={styles.tripInfoIcon}>🕐</div>
-                            <span>{schedule?.departure_time ? new Date(schedule.departure_time).toLocaleString('vi-VN') : 'N/A'}</span>
+                            <span>{schedule?.departureTime ? new Date(schedule.departureTime).toLocaleString('vi-VN') : 'N/A'}</span>
                         </div>
                         <div style={styles.tripInfoItem}>
                             <div style={styles.tripInfoIcon}>💺</div>
@@ -132,7 +142,7 @@ export default function SeatListModal({ open, onClose, schedule }) {
                         </div>
                         <div style={styles.tripInfoItem}>
                             <div style={styles.tripInfoIcon}>🛣️</div>
-                            <span>Tuyến #{schedule?.route_id}</span>
+                            <span>Tuyến #{schedule?.routeId || schedule?.route_id}</span>
                         </div>
                     </div>
                 </div>
@@ -186,11 +196,11 @@ export default function SeatListModal({ open, onClose, schedule }) {
                                                 onClick={() => toggleSeat(seat)}
                                                 disabled={!available}
                                                 style={{ ...styles.seatBtn, ...seatStyle }}
-                                                title={available ? `Ghế ${seat.seat_number || seat.id} - ${seat.price_for_type_seat ? Number(seat.price_for_type_seat).toLocaleString('vi-VN') + '₫' : 'Liên hệ'}` : 'Ghế đã được đặt'}
+                                                title={available ? `Ghế ${seat.seatNumber || seat.id} - ${seat.priceForTypeSeat ? Number(seat.priceForTypeSeat).toLocaleString('vi-VN') + '₫' : 'Liên hệ'}` : 'Ghế đã được đặt'}
                                             >
-                                                {seat.seat_type && <span style={styles.seatType}>{seat.seat_type.charAt(0)}</span>}
-                                                <span style={styles.seatNumber}>{seat.seat_number || seat.code || seat.id}</span>
-                                                <span style={styles.seatPrice}>{seat.price_for_type_seat ? (Number(seat.price_for_type_seat) / 1000) + 'k' : '-'}</span>
+                                                {seat.seatType && <span style={styles.seatType}>{seat.seatType.charAt(0)}</span>}
+                                                <span style={styles.seatNumber}>{seat.seatNumber || seat.code || seat.id}</span>
+                                                <span style={styles.seatPrice}>{seat.priceForTypeSeat ? (Number(seat.priceForTypeSeat) / 1000) + 'k' : '-'}</span>
                                             </button>
                                         );
                                     })}
@@ -211,7 +221,7 @@ export default function SeatListModal({ open, onClose, schedule }) {
                     <div style={styles.priceInfo}>
                         <div style={styles.priceLabel}>Tổng tiền</div>
                         <div style={styles.priceValue}>
-                            {selectedSeat?.price_for_type_seat ? Number(selectedSeat.price_for_type_seat).toLocaleString('vi-VN') + '₫' : '0₫'}
+                            {selectedSeat?.priceForTypeSeat ? Number(selectedSeat.priceForTypeSeat).toLocaleString('vi-VN') + '₫' : '0₫'}
                         </div>
                     </div>
                     <div style={styles.actions}>

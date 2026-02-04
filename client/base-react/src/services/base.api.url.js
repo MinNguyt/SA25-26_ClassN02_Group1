@@ -39,34 +39,38 @@ export const API_ENDPOINTS = {
     DELETE_STATION: '/stations/:id',
 
     // Cars/Vehicles
-    CARS: '/cars',
-    CAR_DETAILS: '/cars/:id',
-    CARS_BY_COMPANY: '/cars/company/:companyId',
-    CREATE_CAR: '/cars',
-    UPDATE_CAR: '/cars/:id',
-    DELETE_CAR: '/cars/:id',
+    CARS: '/vehicles',
+    CAR_DETAILS: '/vehicles/:id',
+    CARS_BY_COMPANY: '/vehicles', // Used with query param
+    CREATE_CAR: '/vehicles',
+    UPDATE_CAR: '/vehicles/:id',
+    DELETE_CAR: '/vehicles/:id',
 
     // Seats
     SEATS: '/seats',
-    SEAT_DETAILS: '/seats/:id',
+    SEAT_DETAILS: '/seats/vehicle/:id',
     CREATE_SEAT: '/seats',
     UPDATE_SEAT: '/seats/:id',
     DELETE_SEAT: '/seats/:id',
 
     // Tickets
-    TICKETS: '/tickets',
+    TICKETS: '/tickets/history',
     TICKET_DETAILS: '/tickets/:id',
     CREATE_TICKET: '/tickets',
     UPDATE_TICKET: '/tickets/:id',
     DELETE_TICKET: '/tickets/:id',
-    GET_ROUTES: '/tickets/routes',
-    GET_BUSES_BY_ROUTE: '/tickets/routes/:routeId/buses',
-    GET_AVAILABLE_SEATS: '/tickets/buses/:busId/seats',
+    GET_ROUTES: '/routes',
+    GET_BUSES_BY_ROUTE: '/vehicle-schedules', // Closest match for buses by route is schedules
+    GET_AVAILABLE_SEATS: '/seats/vehicle/:busId/available',
     BOOK_TICKET: '/tickets/booking',
-    CANCEL_TICKET: '/tickets/:ticketId/cancel',
+    CANCEL_TICKET: '/tickets/cancel/:ticketId',
     CHECK_PAYMENT_STATUS: '/tickets/payment/status/:ticketId',
     TICKET_HISTORY: '/tickets/history',
     SEARCH_TICKET: '/tickets/search',
+    GET_TICKETS_BY_STATUS: '/tickets/history_status/:status',
+    GET_CANCELLED_TICKETS: '/tickets/cancel_ticket/list',
+    ADMIN_CANCEL_TICKET: '/tickets/cancel_ticket/add/:ticketId',
+    DELETE_CANCELLED_TICKET: '/tickets/cancel_ticket/delete/:ticketId',
 
     // Ticket Orders
     TICKET_ORDERS: '/ticket-orders',
@@ -104,7 +108,7 @@ export const API_ENDPOINTS = {
     DELETE_VEHICLE_SCHEDULE: '/vehicle-schedules/:id',
 
     // Seat availability by bus (ticket module)
-    SEATS_BY_BUS_AVAILABILITY: '/tickets/buses/:busId/seats',
+    SEATS_BY_BUS_AVAILABILITY: '/seats/vehicle/:busId/available',
 
     // Special endpoints
     GET_BUS_REVIEWS: '/getBus_review',
